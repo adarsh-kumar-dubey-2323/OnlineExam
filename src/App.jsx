@@ -219,21 +219,25 @@ const MainApp = () => {
         </div>
       } />
       
-      <Route path="/admin" element={
-        isLocal ? 
-        <Admin 
-          validCodes={validCodes} 
-          onAddCode={() => setValidCodes(prev => [...prev, generate8LetterCode()])} 
-          usedCodes={usedCodes} 
-          allSubmissions={allSubmissions} 
-          questionsBank={questionsBank} 
-          onUpdateQuestions={handleUpdateQuestions} 
-          adminSettings={adminSettings}
-          setAdminSettings={setAdminSettings}
-        /> : <Navigate to="/" />
-      } />
-    </Routes>
+     <Route
+  path="/admin"
+  element={
+    <Admin
+      validCodes={validCodes}
+      onAddCode={() =>
+        setValidCodes(prev => [...prev, generate8LetterCode()])
+      }
+      usedCodes={usedCodes}
+      allSubmissions={allSubmissions}
+      questionsBank={questionsBank}
+      onUpdateQuestions={handleUpdateQuestions}
+      adminSettings={adminSettings}
+      setAdminSettings={setAdminSettings}
+    />
+    }
+  />
+  </Routes>
   );
-};
+}
 
 export default MainApp;
