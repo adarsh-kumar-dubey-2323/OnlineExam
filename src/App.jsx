@@ -154,29 +154,142 @@ const MainApp = () => {
             </div>
           )}
 
-          {step === 'form' && (
-            <div className="min-h-screen flex items-center justify-center p-6 relative z-10">
-              <div className="max-w-xl w-full bg-white/90 backdrop-blur-xl rounded-[2.5rem] p-10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white animate-float">
-                <h2 className="text-3xl font-black mb-2 text-[#1d1d1f]">Candidate Details</h2>
-                <p className="text-gray-500 mb-8 font-medium">Please enter your information to start.</p>
-                <div className="space-y-4">
-                  <input type="text" placeholder="Full Name" required className="w-full p-4 bg-[#F5F5F7] rounded-2xl outline-none focus:ring-2 ring-blue-500" onChange={(e)=>setUser({...user, name: e.target.value})} />
-                  <input type="email" placeholder="Email Address" required className="w-full p-4 bg-[#F5F5F7] rounded-2xl outline-none focus:ring-2 ring-blue-500" onChange={(e)=>setUser({...user, email: e.target.value})} />
-                  <div className="flex gap-4">
-                    <select className="w-1/2 p-4 bg-[#F5F5F7] rounded-2xl outline-none cursor-pointer focus:ring-2 ring-blue-500" onChange={(e)=>setUser({...user, duration: parseInt(e.target.value)})}>
-                      <option value="10">10 Mins Test</option>
-                      <option value="15">15 Mins Test</option>
-                      <option value="20">20 Mins Test</option>
-                      <option value="25">25 Mins Test</option>
-                      <option value="30">30 Mins Test</option>
-                    </select>
-                    <input type="tel" placeholder="Phone Number" required className="w-1/2 p-4 bg-[#F5F5F7] rounded-2xl outline-none focus:ring-2 ring-blue-500" onChange={(e)=>setUser({...user, phone: e.target.value})} />
-                  </div>
-                  <button onClick={()=>{ setTimeLeft(user.duration*60); setStep('test'); }} className="w-full py-5 bg-blue-600 text-white rounded-2xl font-bold mt-4 shadow-xl shadow-blue-200 hover:bg-blue-700 transition-all flex justify-center items-center gap-2">Start Assessment <ChevronRight size={20}/></button>
-                </div>
-              </div>
-            </div>
-          )}
+{step === 'form' && (
+  <div className="min-h-screen flex items-center justify-center p-6 relative z-10">
+    <div className="max-w-xl w-full bg-white/90 backdrop-blur-xl rounded-[2.5rem] p-10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white animate-float">
+
+      <h2 className="text-3xl font-black mb-2 text-[#1d1d1f]">
+        Candidate Details
+      </h2>
+
+      <p className="text-gray-500 mb-8 font-medium">
+        Please enter your information to start.
+      </p>
+
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+
+          // Full Name validation
+          if (!user.name.trim()) {
+            alert("Please enter your full name.");
+            return;
+          }
+
+          // Email validation
+          if (!user.email.trim()) {
+            alert("Please enter your email address.");
+            return;
+          }
+
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+          if (!emailRegex.test(user.email)) {
+            alert("Please enter a valid email address.");
+            return;
+          }
+
+          // Phone validation
+          if (!user.phone.trim()) {
+            alert("Please enter your phone number.");
+            return;
+          }
+
+          if (!/^[0-9]{10}$/.test(user.phone)) {
+            alert("Please enter a valid 10-digit phone number.");
+            return;
+          }
+
+          // Everything valid → Start Test
+          setTimeLeft(user.duration * 60);
+          setStep("test");
+        }}
+        className="space-y-4"
+      >
+
+        {/* FULL NAME */}
+        <input
+          type="text"
+          placeholder="Full Name *"
+          value={user.name}
+          required
+          onChange={(e) =>
+            setUser({
+              ...user,
+              name: e.target.value
+            })
+          }
+          className="w-full p-4 bg-[#F5F5F7] rounded-2xl outline-none focus:ring-2 ring-blue-500"
+        />
+
+        {/* EMAIL */}
+        <input
+          type="email"
+          placeholder="Email Address *"
+          value={user.email}
+          required
+          onChange={(e) =>
+            setUser({
+              ...user,
+              email: e.target.value
+            })
+          }
+          className="w-full p-4 bg-[#F5F5F7] rounded-2xl outline-none focus:ring-2 ring-blue-500"
+        />
+
+        <div className="flex gap-4">
+
+          {/* TEST DURATION */}
+          <select
+            value={user.duration}
+            required
+            onChange={(e) =>
+              setUser({
+                ...user,
+                duration: parseInt(e.target.value)
+              })
+            }
+            className="w-1/2 p-4 bg-[#F5F5F7] rounded-2xl outline-none cursor-pointer focus:ring-2 ring-blue-500"
+          >
+            <option value="10">10 Mins Test</option>
+            <option value="15">15 Mins Test</option>
+            <option value="20">20 Mins Test</option>
+            <option value="25">25 Mins Test</option>
+            <option value="30">30 Mins Test</option>
+          </select>
+
+          {/* PHONE */}
+          <input
+            type="tel"
+            placeholder="Phone Number *"
+            value={user.phone}
+            required
+            maxLength="10"
+            inputMode="numeric"
+            onChange={(e) =>
+              setUser({
+                ...user,
+                phone: e.target.value.replace(/\D/g, "")
+              })
+            }
+            className="w-1/2 p-4 bg-[#F5F5F7] rounded-2xl outline-none focus:ring-2 ring-blue-500"
+          />
+
+        </div>
+
+        {/* START BUTTON */}
+        <button
+          type="submit"
+          className="w-full py-5 bg-blue-600 text-white rounded-2xl font-bold mt-4 shadow-xl shadow-blue-200 hover:bg-blue-700 transition-all flex justify-center items-center gap-2"
+        >
+          Start Assessment
+          <ChevronRight size={20} />
+        </button>
+
+      </form>
+    </div>
+  </div>
+)}
 
           {/* Test & Result code remains same visually, keeping it clean */}
           {step === 'test' && (
