@@ -49,7 +49,7 @@ const MainApp = () => {
   const [validCodes, setValidCodes] = useLocalStorage('mu_validCodes', ['APP#KID$', 'TEST*QA#', 'CODE@STR']);
   const [usedCodes, setUsedCodes] = useLocalStorage('mu_usedCodes', []);
   const [allSubmissions, setAllSubmissions] = useLocalStorage('mu_submissions', []);
-  const [adminSettings, setAdminSettings] = useLocalStorage('mu_settings', { warningMinutes: 2 }); // 🔥 Dynamic Notification
+  const [adminSettings, setAdminSettings] = useLocalStorage('mu_settings', { warningMinutes: 2 }); // Dynamic Notification
   const [questionsBank, setQuestionsBank] = useLocalStorage('mu_questions', {
     10: [
       { id: 1, q: "React uses which language?", opts: ["Java", "PHP", "JavaScript", "C++"], ans: 2 },
@@ -71,7 +71,7 @@ const MainApp = () => {
     return Array.from({length: 8}, () => chars.charAt(Math.floor(Math.random() * chars.length))).join('');
   };
 
-  // 🔥 Timer & Notification Effect
+  // Timer & Notification Effect
   useEffect(() => {
     let timer;
     if (step === 'test' && timeLeft > 0) {
@@ -93,7 +93,7 @@ const MainApp = () => {
   const finishTest = () => {
     let fScore = 0;
     
-    // 🔥 Saving Detailed Answers for Admin
+    // Saving Detailed Answers for Admin
     const detailedAnswers = currentQuestions.map((q, i) => {
       const isCorrect = userAnswers[i] === q.ans;
       if (isCorrect) fScore++;
@@ -134,7 +134,7 @@ const MainApp = () => {
       <Route path="/" element={
         <div className="min-h-screen bg-[#F5F5F7] relative overflow-hidden font-sans">
           
-          {/* 🔥 Aesthetic Background Elements */}
+          {/* Background Elements */}
           <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-blue-300 rounded-full mix-blend-multiply filter blur-[100px] opacity-40 animate-float"></div>
           <div className="absolute bottom-[-10%] right-[-5%] w-96 h-96 bg-purple-300 rounded-full mix-blend-multiply filter blur-[100px] opacity-40 animate-float-delayed"></div>
 
@@ -148,7 +148,7 @@ const MainApp = () => {
 
               <div className="max-w-md w-full bg-white/80 backdrop-blur-xl rounded-[2.5rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-12 text-center border border-white">
                 <h2 className="text-2xl font-bold mb-8 text-[#1d1d1f]">Candidate Verification</h2>
-                <input type="text" placeholder="8-LETTER CODE" className="w-full p-5 bg-[#F5F5F7] rounded-2xl text-center text-xl font-mono mb-6 outline-none focus:ring-2 ring-blue-500 transition-all uppercase" onChange={(e)=>setAccessCode(e.target.value)} />
+                <input type="text" placeholder="8-LETTER CODE" required className="w-full p-5 bg-[#F5F5F7] rounded-2xl text-center text-xl font-mono mb-6 outline-none focus:ring-2 ring-blue-500 transition-all uppercase" onChange={(e)=>setAccessCode(e.target.value)} />
                 <button onClick={()=>{ if(validCodes.includes(accessCode) && !usedCodes.includes(accessCode)) setStep('form'); else alert("Invalid or Used Code"); }} className="w-full py-5 bg-[#1d1d1f] text-white rounded-2xl font-bold shadow-xl hover:bg-black transition-all">Proceed to Form</button>
               </div>
             </div>
@@ -160,8 +160,8 @@ const MainApp = () => {
                 <h2 className="text-3xl font-black mb-2 text-[#1d1d1f]">Candidate Details</h2>
                 <p className="text-gray-500 mb-8 font-medium">Please enter your information to start.</p>
                 <div className="space-y-4">
-                  <input type="text" placeholder="Full Name" className="w-full p-4 bg-[#F5F5F7] rounded-2xl outline-none focus:ring-2 ring-blue-500" onChange={(e)=>setUser({...user, name: e.target.value})} />
-                  <input type="email" placeholder="Email Address" className="w-full p-4 bg-[#F5F5F7] rounded-2xl outline-none focus:ring-2 ring-blue-500" onChange={(e)=>setUser({...user, email: e.target.value})} />
+                  <input type="text" placeholder="Full Name" required className="w-full p-4 bg-[#F5F5F7] rounded-2xl outline-none focus:ring-2 ring-blue-500" onChange={(e)=>setUser({...user, name: e.target.value})} />
+                  <input type="email" placeholder="Email Address" required className="w-full p-4 bg-[#F5F5F7] rounded-2xl outline-none focus:ring-2 ring-blue-500" onChange={(e)=>setUser({...user, email: e.target.value})} />
                   <div className="flex gap-4">
                     <select className="w-1/2 p-4 bg-[#F5F5F7] rounded-2xl outline-none cursor-pointer focus:ring-2 ring-blue-500" onChange={(e)=>setUser({...user, duration: parseInt(e.target.value)})}>
                       <option value="10">10 Mins Test</option>
@@ -170,7 +170,7 @@ const MainApp = () => {
                       <option value="25">25 Mins Test</option>
                       <option value="30">30 Mins Test</option>
                     </select>
-                    <input type="tel" placeholder="Phone Number" className="w-1/2 p-4 bg-[#F5F5F7] rounded-2xl outline-none focus:ring-2 ring-blue-500" onChange={(e)=>setUser({...user, phone: e.target.value})} />
+                    <input type="tel" placeholder="Phone Number" required className="w-1/2 p-4 bg-[#F5F5F7] rounded-2xl outline-none focus:ring-2 ring-blue-500" onChange={(e)=>setUser({...user, phone: e.target.value})} />
                   </div>
                   <button onClick={()=>{ setTimeLeft(user.duration*60); setStep('test'); }} className="w-full py-5 bg-blue-600 text-white rounded-2xl font-bold mt-4 shadow-xl shadow-blue-200 hover:bg-blue-700 transition-all flex justify-center items-center gap-2">Start Assessment <ChevronRight size={20}/></button>
                 </div>
